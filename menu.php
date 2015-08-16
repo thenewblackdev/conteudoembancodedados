@@ -47,6 +47,12 @@
                 <li><a href="/servicos">SERVIÇOS</a></li>
                 <li><a href="/contato">CONTATO</a></li>
             </ul>
+            <form class="navbar-form navbar-right" method="GET" action="busca.php" role="search">
+              <div class="form-group">
+                <input type="text" id="busca" name="busca" class="form-control" placeholder="Pesquise uma Página">
+              </div>
+              <button type="submit" class="btn btn-default">Buscar</button>
+            </form>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>

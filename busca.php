@@ -39,13 +39,15 @@ require_once "head.php";
 require_once "conexaoDB.php";
 
 $conn = conexaoDB();
-$sql  = ("SELECT titulo, conteudo FROM projetopdo.paginas WHERE titulo='$path'");
+$sql  = ("SELECT * FROM projetopdo.paginas WHERE (`titulo` LIKE '%".$_GET['busca']."%') ");
 $stmt = $conn->prepare($sql);
 $stmt->execute();
 
 $paginas  = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
+
+
 
 <div class="container">
     <div class="row">
@@ -57,23 +59,29 @@ $paginas  = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="row">
         <?php $rotasValidas = array('home', 'empresa', 'produtos', 'servicos', 'contato'); ?>
 
-        <?php 
+        <?php if ($_GET['busca'] == ""): ?>
+            <?php 
+                header("Location: index.php");
+                die();
+            ?>
+        <?php endif; ?>
 
-        foreach($paginas as $pagina){
-            if (in_array($pagina['titulo'], $pagina)) { ?>
-                <h1><?php echo $pagina['titulo']; ?></h1>
-                <p><?php echo $pagina['conteudo']; ?></p>
-            <?php } else {
-                require_once ("404.php");
-            }
-        }
-
-        // var_dump($paginas);
-        // echo "<br />";
-        // var_dump($rotasValidas);
-        // echo "<br />";
-        // var_dump($pagina)
-        ?>
+        <?php if (count($paginas) <= 0): ?>
+            <p><b>Nenhum</b> resultado foi encontrado.</p>
+        <?php else: ?>
+                <p>Encontramos <b><?php echo count($paginas) ?></b> resultado<?php echo ( count($paginas) > 1 ? "s" : "" ); ?> para a sua busca.</p>
+                <hr />
+            <?php 
+                foreach($paginas as $pagina){
+                    if (in_array($pagina['titulo'], $pagina)) { ?>
+                        <a href="/<?php echo strtolower($pagina['titulo']); ?>"><h1><?php echo $pagina['titulo']; ?></h1></a>
+                        <p><?php echo $pagina['conteudo']; ?></p>
+                    <?php } else {
+                        require_once ("404.php");
+                    }
+                }
+             ?>
+        <?php endif ?>
     </div>
 </div>
 
