@@ -29,7 +29,6 @@ error_reporting(E_ALL);
 
 $rota = parse_url("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 $path = ltrim($rota['path'], "/");
-echo $path;
 
 ?>
 

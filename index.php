@@ -29,7 +29,6 @@ error_reporting(E_ALL);
 
 $rota = parse_url("http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 $path = ltrim($rota['path'], "/");
-echo $path;
 
 ?>
 
@@ -55,24 +54,38 @@ $paginas  = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="container">
     <div class="row">
-        <?php $rotasValidas = array('home', 'empresa', 'produtos', 'servicos', 'contato'); ?>
-
         <?php 
 
         foreach($paginas as $pagina){
-            if (in_array($pagina['titulo'], $pagina)) { ?>
+            if (in_array($pagina['titulo'], $pagina)){ ?>
                 <h1><?php echo $pagina['titulo']; ?></h1>
                 <p><?php echo $pagina['conteudo']; ?></p>
+                <?php if ($path == "contato"): ?>
+                    <form action="acaoContato.php" method="POST">
+                        <div class="form-group">
+                            <label for="nome">Nome</label>
+                            <input type="text" name="nome" class="form-control" placeholder="Digite o seu nome completo">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="text" name="email" class="form-control" placeholder="exemplo@exemplo.com.br">
+                        </div>
+                        <div class="form-group">
+                            <label for="assunto">Assunto</label>
+                            <input type="text" name="assunto" class="form-control" placeholder="Qual é o motivo do seu contato?">
+                        </div>
+                        <div class="form-group">
+                            <label for="mensagem">Mensagem</label>
+                            <textarea name="mensagem" class="form-control" rows="8"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-default">Enviar</button>
+                    </form>
+
+                <?php endif ?>
             <?php } else {
                 require_once ("404.php");
             }
         }
-
-        // var_dump($paginas);
-        // echo "<br />";
-        // var_dump($rotasValidas);
-        // echo "<br />";
-        // var_dump($pagina)
         ?>
     </div>
 </div>
